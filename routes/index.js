@@ -23,7 +23,7 @@ router.get('/', asyncMiddleware(async (req, res, next) => {
   const pages = paginate.getArrayPages(req)(total, total, page)
 
   const data = await response.json()
-  const initialState = { data, pages, start: (page - 1) * limit }
+  const initialState = { data, pages, page, limit }
   const html = app(initialState).toString()
 
   res.render('index', { html, initialState })

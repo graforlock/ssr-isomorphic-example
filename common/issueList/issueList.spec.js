@@ -17,7 +17,7 @@ describe('renders a correct issue list html output', t => {
 
   const expectedHtml = bel`
     <ul>
-      <li><a href="http://url-to-the-issue/1">Issue title #1</a></li>
+      <li><a target="_blank" href="http://url-to-the-issue/1">Issue title #1</a></li>
     </ul>`
 
   t.equal(minify(html.toString(), minifyConfig), minify(expectedHtml.toString(), minifyConfig))

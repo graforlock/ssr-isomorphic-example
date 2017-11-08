@@ -13,10 +13,10 @@ describe('renders a correct list html output', t => {
   const html = repoList([
     { name: 'repo-a' },
     { name: 'repo-b' }
-  ])
+  ], 0)
 
   const expectedHtml = bel`
-    <ol>
+    <ol start="1">
       <li>
         <h3 style="cursor: pointer" onclick="">repo-a</h3>
         <ul></ul>

@@ -20,7 +20,7 @@ describe('doesn\'t fail without any input arguments', t => {
 
   const expectedHtml = bel`
     <body>
-      <main><ol></ol></main>
+      <main><ol start="1"></ol></main>
       <section></section>
     </body>
   `
