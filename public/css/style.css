@@ -5,5 +5,12 @@ body {
 
 a {
   color: #00B7FF;
-  padding: 5px;
+}
+
+a, span {
+  padding: 5px;  
+}
+
+span {
+  color: gainsboro;
 }
