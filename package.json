@@ -6,7 +6,7 @@
     "bundle": "browserify client/index.js -o public/js/bundle.js",
     "dev": "npm run bundle && node ./bin/www",
     "start": "NODE_ENV=production node ./bin/www",
-    "test": "node runner.js | tap-summary"
+    "test": "standard && node runner.js | tap-summary"
   },
   "dependencies": {
     "bel": "^5.1.5",
@@ -29,8 +29,15 @@
     "html-minifier": "^3.5.6",
     "proxyquire": "^1.8.0",
     "sinon": "^4.1.2",
+    "standard": "^10.0.3",
     "supertest": "^3.0.0",
     "tap-summary": "^4.0.0",
     "tape": "^4.8.0"
+  },
+  "standard": {
+    "ignore": [
+      "node_modules",
+      "runner.js"
+    ]
   }
 }
