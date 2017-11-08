@@ -3,6 +3,6 @@ EXPOSE 8080
 COPY . /app
 WORKDIR /app
 ARG PORT
-RUN npm install --production
+RUN npm install && npm run bundle && npm install --prune
 ENTRYPOINT ["npm"]
 CMD ["start"]
