@@ -4,9 +4,9 @@ const morph = require('nanomorph')
 const api = require('../../services/api')
 const issueList = require('../issueList')
 
-const repoList = (repos, pages) => {
+const repoList = (repos, start) => {
   return html`
-    <ol>
+    <ol start="${start + 1}">
       ${repos.map(repo =>
         html`
           <li>
@@ -27,7 +27,7 @@ const repoList = (repos, pages) => {
       const issues = await result.json()
       morph(ul, issueList(issues))
     } catch (err) {
-      console.warn(err)
+      console.error(err)
       morph(ul, html`<ul><li>Oops, something went wrong...</li></ul>`)
     }
   }

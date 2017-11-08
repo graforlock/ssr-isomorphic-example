@@ -8,14 +8,17 @@ morph(document.body, app(window.__INITIAL_STATE__))
 const html = require('bel')
 const repoList = require('./repoList')
 
-const app = ({data = [], pages}) => {
+const app = ({data = [], pages = [], start = 0} = {}) => {
   return html`
     <body>
-      <main>${repoList(data)}</main>
+      <main>${repoList(data, start)}</main>
       <section>
-        ${pages.map(({ number, url }) =>
-          html`<a href=${url}>${number}</a>`
-        )}
+        ${pages.map(({ number, url }) => {
+          return number === (start + 1)
+            ? html`<p>${number}</p>`
+            : html`<a href=${url}>${number}</a>`
+        }
+      )}
       </section>
     </body>`
 }
@@ -34,7 +37,7 @@ function issuesList (issues) {
   return html`
     <ul>
       ${issues.map(({ title, html_url: url }) =>
-        html`<li><a href=${url}>${title}</a></li>`
+        html`<li><a target="_blank" href=${url}>${title}</a></li>`
       )}
     </ul>
   `
@@ -54,9 +57,9 @@ const morph = require('nanomorph')
 const api = require('../../services/api')
 const issueList = require('../issueList')
 
-const repoList = (repos, pages) => {
+const repoList = (repos, start) => {
   return html`
-    <ol>
+    <ol start="${start + 1}">
       ${repos.map(repo =>
         html`
           <li>
@@ -77,7 +80,7 @@ const repoList = (repos, pages) => {
       const issues = await result.json()
       morph(ul, issueList(issues))
     } catch (err) {
-      console.warn(err)
+      console.error(err)
       morph(ul, html`<ul><li>Oops, something went wrong...</li></ul>`)
     }
   }

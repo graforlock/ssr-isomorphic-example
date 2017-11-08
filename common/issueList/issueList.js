@@ -4,7 +4,7 @@ function issuesList (issues) {
   return html`
     <ul>
       ${issues.map(({ title, html_url: url }) =>
-        html`<li><a href=${url}>${title}</a></li>`
+        html`<li><a target="_blank" href=${url}>${title}</a></li>`
       )}
     </ul>
   `

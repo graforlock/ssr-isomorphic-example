@@ -1,34 +1,32 @@
 const express = require('express')
 const router = express.Router()
+const paginate = require('express-paginate')
 
 const api = require('../services/api')
+const asyncMiddleware = require('../middleware/async')
 
 const app = require('../common/app')
 
-const paginate = require('express-paginate')
-
 /* GET home page. */
-router.get('/', async (req, res, next) => {
-  try {
-    const response = await api.fetchRepos(req.query.page, req.query.limit)
-    if (!response.ok) {
-      const err = new Error(response.statusText)
-      err.status = response.status
-      throw err
-    }
-
-    const [, last] = response.headers.get('Link').split(', ')
-    const total = Number(last.match(/page=(\d+).*$/)[1])
-    const pages = paginate.getArrayPages(req)(total, total, req.query.page)
-
-    const data = await response.json()
-    const initialState = { data, pages }
-    const html = app(initialState).toString()
-
-    res.render('index', { html, initialState })
-  } catch (err) {
-    next(err)
+router.get('/', asyncMiddleware(async (req, res, next) => {
+  const { page, limit } = req.query
+  const response = await api.fetchRepos(page, limit)
+  if (!response.ok) {
+    const err = new Error(response.statusText)
+    err.status = response.status
+    throw err
   }
-})
+
+  // Note: This is how github advises to grab the total (in Docs).
+  const [, last] = response.headers.get('Link').split(', ')
+  const total = Number(last.match(/page=(\d+).*$/)[1])
+  const pages = paginate.getArrayPages(req)(total, total, page)
+
+  const data = await response.json()
+  const initialState = { data, pages, start: (page - 1) * limit }
+  const html = app(initialState).toString()
+
+  res.render('index', { html, initialState })
+}))
 
 module.exports = router
